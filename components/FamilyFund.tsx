@@ -35,6 +35,8 @@ const SCENARIO_OFFSETS = [
 type ScenarioKey = (typeof SCENARIO_OFFSETS)[number]["key"];
 
 const TOOLTIPS = {
+  fundStart:
+    "The initial dollar amount you seed the fund with on day one. Larger starting values give the fund more immediate compounding power, but the year-over-year story is mostly driven by the return rate and distribution rate.",
   baseReturn:
     "The average annual nominal return you expect from the fund's investments. The S&P 500's historical nominal average is ~10–11%/year; a conservative diversified portfolio net of fees is typically 7–9%.",
   distributionRate:
@@ -129,12 +131,12 @@ type SimParams = {
   avgLifeExpectancy: number;
   founderAge: number;
   inflationRate: number;
+  fundStart: number;
   years: number;
 };
 
 function simulate(p: SimParams): SimRow[] {
-  const INITIAL = 10_000_000;
-  let fund = INITIAL;
+  let fund = p.fundStart;
   const rows: SimRow[] = [];
   const sched = buildSchedule(p.childrenPerFamily, p.numGenerations);
   const childDelay = (p.minChildren - 1) * 2;
@@ -401,6 +403,7 @@ function SnapRow({ yr, data }: { yr: number; data: SimRow[] }) {
 
 // ── URL state ─────────────────────────────────────────────────────────────────
 type FundState = {
+  fundStart: number;
   baseReturn: number;
   distributionRate: number;
   childrenPerFamily: number;
@@ -416,6 +419,7 @@ type FundState = {
 };
 
 const DEFAULTS: FundState = {
+  fundStart: 10_000_000,
   baseReturn: 0.07,
   distributionRate: 0.04,
   childrenPerFamily: 3,
@@ -431,6 +435,7 @@ const DEFAULTS: FundState = {
 };
 
 const URL_KEY_MAP: Record<keyof FundState, string> = {
+  fundStart: "fs",
   baseReturn: "br",
   distributionRate: "dr",
   childrenPerFamily: "cpf",
@@ -446,6 +451,7 @@ const URL_KEY_MAP: Record<keyof FundState, string> = {
 };
 
 const RANGES: Record<keyof FundState, [number, number]> = {
+  fundStart: [5_000_000, 50_000_000],
   baseReturn: [0.03, 0.14],
   distributionRate: [0.02, 0.07],
   childrenPerFamily: [1, 5],
@@ -533,6 +539,7 @@ export default function FamilyFund() {
   };
 
   const {
+    fundStart,
     baseReturn,
     distributionRate,
     childrenPerFamily,
@@ -612,6 +619,7 @@ export default function FamilyFund() {
         avgLifeExpectancy,
         founderAge,
         inflationRate,
+        fundStart,
         years: simYears,
       });
     });
@@ -629,6 +637,7 @@ export default function FamilyFund() {
     avgLifeExpectancy,
     founderAge,
     inflationRate,
+    fundStart,
     simYears,
   ]);
 
@@ -698,6 +707,7 @@ export default function FamilyFund() {
       const endRow = sims.moderate[simYears];
       const row50 = sims.moderate[50];
       const inputs: AnalysisInputs = {
+        fundStart,
         baseReturn,
         distributionRate,
         childrenPerFamily,
@@ -837,7 +847,7 @@ export default function FamilyFund() {
           Family Dynasty Fund
         </h1>
         <p style={{ color: "#6a7080", fontSize: 12, margin: 0 }}>
-          $10M Base · {numGenerations} Generations · {simYears}-Year Simulation
+          {usdM(fundStart / 1e6)} Base · {numGenerations} Generations · {simYears}-Year Simulation
         </p>
         <div
           style={{
@@ -878,6 +888,52 @@ export default function FamilyFund() {
       </div>
 
       <div style={{ padding: "20px 16px", maxWidth: 780, margin: "0 auto" }}>
+        {/* ── INTRODUCTION ── */}
+        <div
+          style={{
+            background: "#0d1117",
+            border: "1px solid #1a1f2e",
+            borderRadius: 8,
+            padding: "18px 18px 14px",
+            marginBottom: 22,
+          }}
+        >
+          <div
+            style={{
+              fontSize: 9,
+              color: "#c9a96e",
+              letterSpacing: 3,
+              textTransform: "uppercase",
+              marginBottom: 10,
+            }}
+          >
+            Introduction
+          </div>
+          <p style={{ fontSize: 14, color: "#c8c4b8", lineHeight: 1.8, margin: "0 0 12px" }}>
+            Welcome. I built this to plan my family&apos;s future. My goal is generational wealth — for my
+            kids, their kids, and every generation that follows — built on the idea that a rising tide lifts
+            all boats when a family works together.
+          </p>
+          <p style={{ fontSize: 14, color: "#c8c4b8", lineHeight: 1.8, margin: "0 0 12px" }}>
+            The concept is simple. My family pools their money into a single fund. Each year, a fixed
+            percentage of the fund is paid out to eligible families as distributions. As long as we contribute
+            more and let the fund grow faster than we pull out, it compounds across every future generation.
+          </p>
+          <p style={{ fontSize: 14, color: "#c8c4b8", lineHeight: 1.8, margin: 0 }}>
+            Play with the variables below, stress-test the assumptions, and see what&apos;s sustainable. If
+            you have suggestions, I&apos;d love to hear them —{" "}
+            <a
+              href="https://www.linkedin.com/in/junloayza/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "#c9a96e" }}
+            >
+              reach out
+            </a>
+            .
+          </p>
+        </div>
+
         {/* ── SCENARIO CARDS ── */}
         <div style={{ marginBottom: 22 }}>
           <div
@@ -1008,6 +1064,20 @@ export default function FamilyFund() {
           >
             Fund Parameters
           </div>
+
+          <Slider
+            label="Fund Starting Value"
+            highlight
+            accent="#c9a96e"
+            tooltip={TOOLTIPS.fundStart}
+            sublabel="Initial capital the fund is seeded with. Adjust to match what you actually plan to contribute at founding."
+            value={fundStart}
+            min={RANGES.fundStart[0]}
+            max={RANGES.fundStart[1]}
+            step={500_000}
+            onChange={(v) => setState({ fundStart: v })}
+            fmt={(v) => `$${(v / 1e6).toFixed(1)}M`}
+          />
 
           <Slider
             label="Expected Market Return (Base)"

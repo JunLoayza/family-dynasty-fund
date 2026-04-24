@@ -46,8 +46,7 @@ export default function Footer() {
           margin: "0 auto 18px",
         }}
       >
-        Jun Loayza works across multiple ventures including The Octalysis Group, Chou Force, and an
-        Influencer Incubator. He built this simulator to explore multi-generational wealth strategies.
+        Jun is a disciple of Christ, proud father of 3 dumplings, and a loving husband.
       </p>
       <div
         style={{

@@ -37,6 +37,7 @@ export type CallResult = {
 };
 
 export type AnalysisInputs = {
+  fundStart: number;
   baseReturn: number;
   distributionRate: number;
   childrenPerFamily: number;
@@ -66,7 +67,7 @@ function buildPrompt(x: AnalysisInputs): string {
   return `You are a multi-generational wealth planning analyst. Analyze this family dynasty fund configuration and return STRICT JSON only — no prose, no markdown, no code fences.
 
 CONFIGURATION:
-- Initial fund: $10,000,000
+- Initial fund: ${usd(x.fundStart)}
 - Base annual return: ${pct(x.baseReturn)}
 - Distribution rate: ${pct(x.distributionRate)} of total fund per year
 - Net growth before contributions: ${pct(netGrowth)}
