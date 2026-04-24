@@ -547,7 +547,19 @@ export default function FamilyFund() {
     minChildren,
   } = state;
 
-  const simYears = useMemo(() => 50 + numGenerations * 25, [numGenerations]);
+  // Simulation horizon = midpoint of the last generation's death range.
+  // Guarantees that at year simYears, some families of the last generation are still alive
+  // (otherwise eligible = 0 and per-family payouts collapse to $0 at the end of the sim).
+  const simYears = useMemo(() => {
+    const sched = buildSchedule(childrenPerFamily, numGenerations);
+    const lastGenDeaths = sched
+      .filter((e) => e.gen === numGenerations)
+      .map((e) => deathYear(e, avgLifeExpectancy, founderAge));
+    if (!lastGenDeaths.length) return 100;
+    const earliest = Math.min(...lastGenDeaths);
+    const latest = Math.max(...lastGenDeaths);
+    return Math.round((earliest + latest) / 2);
+  }, [childrenPerFamily, numGenerations, avgLifeExpectancy, founderAge]);
 
   const scenarios = useMemo(
     () =>
