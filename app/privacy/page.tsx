@@ -1,8 +1,8 @@
 import LegalPage from "@/components/LegalPage";
 
 export const metadata = {
-  title: "Privacy Policy — Family Dynasty Fund",
-  description: "How Family Dynasty Fund handles (and does not handle) your data.",
+  title: "Privacy Policy — Family Dynasty",
+  description: "How Family Dynasty handles (and does not handle) your data.",
 };
 
 const H2: React.CSSProperties = {
@@ -20,7 +20,7 @@ export default function PrivacyPage() {
   return (
     <LegalPage title="Privacy Policy" subtitle="Your Data, Plainly" updated="April 2026">
       <p style={P}>
-        Family Dynasty Fund (&quot;the Site&quot;) is a client-side financial simulator. This policy describes what
+        Family Dynasty (&quot;the Site&quot;) is a client-side financial simulator. This policy describes what
         the Site does and does not collect. Read the{" "}
         <a href="/terms" style={{ color: "#c9a96e" }}>
           Terms of Service

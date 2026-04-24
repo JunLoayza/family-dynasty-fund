@@ -5,10 +5,11 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://familydynasty.verc
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Family Dynasty Fund Simulator — 150-Year Wealth Planner",
+  title: "Family Dynasty Simulator",
   description:
-    "Interactive simulator for planning a multi-generational family trust. Model 3–6 generations of wealth transfer with adjustable returns, distribution rules, and family structure. Created by Jun Loayza.",
+    "Plan your family's multi-generational wealth across 6 generations. Interactive models with adjustable rules, returns, and family structure.",
   keywords: [
+    "family dynasty",
     "dynasty trust",
     "generational wealth",
     "family fund",
@@ -26,19 +27,20 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true },
   },
   openGraph: {
-    title: "Family Dynasty Fund Simulator",
+    title: "Family Dynasty",
     description:
-      "Plan your family's multi-generational wealth across 150 years. Interactive model with adjustable rules, returns, and family structure.",
+      "Plan your family's multi-generational wealth across 6 generations. Interactive models with adjustable rules, returns, and family structure.",
     url: SITE_URL,
-    siteName: "Family Dynasty Fund",
+    siteName: "Family Dynasty",
     images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Family Dynasty Fund Simulator",
-    description: "Plan your family's multi-generational wealth across 150 years.",
+    title: "Family Dynasty Simulator",
+    description:
+      "Plan your family's multi-generational wealth across 6 generations. Interactive models with adjustable rules, returns, and family structure.",
     creator: "@JunLoayza",
     images: ["/opengraph-image"],
   },

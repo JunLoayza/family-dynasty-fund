@@ -425,7 +425,7 @@ const DEFAULTS: FundState = {
   childrenPerFamily: 3,
   numGenerations: 4,
   avgLifeExpectancy: 85,
-  founderAge: 40,
+  founderAge: 50,
   avgIncome: 150_000,
   minContrib: 10_000,
   maxContrib: 50_000,
@@ -844,7 +844,7 @@ export default function FamilyFund() {
             letterSpacing: 0.5,
           }}
         >
-          Family Dynasty Fund
+          Family Dynasty
         </h1>
         <p style={{ color: "#6a7080", fontSize: 12, margin: 0 }}>
           {usdM(fundStart / 1e6)} Base · {numGenerations} Generations · {simYears}-Year Simulation
@@ -910,27 +910,19 @@ export default function FamilyFund() {
             Introduction
           </div>
           <p style={{ fontSize: 14, color: "#c8c4b8", lineHeight: 1.8, margin: "0 0 12px" }}>
-            Welcome. I built this to plan my family&apos;s future. My goal is generational wealth — for my
-            kids, their kids, and every generation that follows — built on the idea that a rising tide lifts
+            Welcome! I built this to plan my family&apos;s future. My goal is generational wealth, for my
+            kids, their kids, and every generation that follows, built on the idea that a rising tide lifts
             all boats when a family works together.
           </p>
           <p style={{ fontSize: 14, color: "#c8c4b8", lineHeight: 1.8, margin: "0 0 12px" }}>
-            The concept is simple. My family pools their money into a single fund. Each year, a fixed
-            percentage of the fund is paid out to eligible families as distributions. As long as we contribute
-            more and let the fund grow faster than we pull out, it compounds across every future generation.
+            The concept is simple: a family pools their money into a single fund. Each year, a fixed
+            percentage of the fund is paid out to eligible families as distributions. As long as they
+            contribute more and let the fund grow faster than they pull out, it compounds across every future
+            generation.
           </p>
           <p style={{ fontSize: 14, color: "#c8c4b8", lineHeight: 1.8, margin: 0 }}>
             Play with the variables below, stress-test the assumptions, and see what&apos;s sustainable. If
-            you have suggestions, I&apos;d love to hear them —{" "}
-            <a
-              href="https://www.linkedin.com/in/junloayza/"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: "#c9a96e" }}
-            >
-              reach out
-            </a>
-            .
+            you have suggestions, I&apos;d love to hear them.
           </p>
         </div>
 

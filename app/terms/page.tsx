@@ -1,8 +1,8 @@
 import LegalPage from "@/components/LegalPage";
 
 export const metadata = {
-  title: "Terms of Service — Family Dynasty Fund",
-  description: "The terms that govern your use of Family Dynasty Fund.",
+  title: "Terms of Service — Family Dynasty",
+  description: "The terms that govern your use of Family Dynasty.",
 };
 
 const H2: React.CSSProperties = {
