@@ -547,19 +547,37 @@ export default function FamilyFund() {
     minChildren,
   } = state;
 
-  // Simulation horizon = midpoint of the last generation's death range.
-  // Guarantees that at year simYears, some families of the last generation are still alive
-  // (otherwise eligible = 0 and per-family payouts collapse to $0 at the end of the sim).
+  // Simulation horizon = last year at global peak eligible-family count.
+  // Running past this point is misleading: as older generations die off, per-family
+  // payouts rise purely from the denominator shrinking (survivor bias), not because
+  // the fund actually got healthier. The peak-eligibility year is the "stress test" —
+  // the year when the pool splits the most ways across all living generations.
   const simYears = useMemo(() => {
     const sched = buildSchedule(childrenPerFamily, numGenerations);
-    const lastGenDeaths = sched
-      .filter((e) => e.gen === numGenerations)
-      .map((e) => deathYear(e, avgLifeExpectancy, founderAge));
-    if (!lastGenDeaths.length) return 100;
-    const earliest = Math.min(...lastGenDeaths);
-    const latest = Math.max(...lastGenDeaths);
-    return Math.round((earliest + latest) / 2);
-  }, [childrenPerFamily, numGenerations, avgLifeExpectancy, founderAge]);
+    const schedD = sched.map((e) => ({
+      ...e,
+      dieYear: deathYear(e, avgLifeExpectancy, founderAge),
+    }));
+    const childDelay = (minChildren - 1) * 2;
+    const payoutDelay = Math.max(minContribYears, childDelay);
+    const horizon = Math.max(...schedD.map((e) => e.dieYear), 1);
+
+    let peak = 0;
+    let peakYr = 0;
+    for (let yr = 0; yr <= horizon; yr++) {
+      let eligible = 0;
+      for (const e of schedD) {
+        if (e.year <= yr && yr <= e.dieYear && (e.exempt || e.year + payoutDelay <= yr)) {
+          eligible++;
+        }
+      }
+      if (eligible >= peak) {
+        peak = eligible;
+        peakYr = yr;
+      }
+    }
+    return Math.max(peakYr, 10);
+  }, [childrenPerFamily, numGenerations, avgLifeExpectancy, founderAge, minChildren, minContribYears]);
 
   const scenarios = useMemo(
     () =>
